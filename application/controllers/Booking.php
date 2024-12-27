@@ -766,4 +766,39 @@ class Booking extends EA_Controller
 
         return $provider_list;
     }
+
+    public function setup_stripe_payment_intent()
+    {
+
+        require_once 'application/secrets/secrets.php';
+
+        $stripe = new \Stripe\StripeClient($stripeSecretKey);
+        
+        $price = request('price');
+
+        try 
+        {
+            $paymentIntent = $stripe->paymentIntents->create([
+                'amount' => $price,
+                'currency' => 'usd',
+                
+                // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                ],
+            ]);
+        }
+        catch (Error $e) 
+        {
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+
+        $output = [
+            'clientSecret' => $paymentIntent->client_secret,
+        ];
+
+        echo json_encode($output);
+
+    }
 }
