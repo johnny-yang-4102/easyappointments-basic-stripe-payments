@@ -1,3 +1,9 @@
+<h1 align = "center">
+    Modified with payments by Johnny Yang
+</h1>
+
+<p>Integrated using stripe software. Code is committed in a portioned manner making it easy to follow along</p>
+
 <h1 align="center">
     <br>
     <a href="https://easyappointments.org">
