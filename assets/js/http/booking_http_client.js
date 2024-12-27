@@ -390,11 +390,67 @@ App.Http.Booking = (function () {
         });
     }
 
+    async function initializeStripePaymentUIWithServiceCost(price) 
+    {
+        const url = App.Utils.Url.siteUrl('booking/setup_stripe_payment_intent');
+
+        const data = {
+            csrf_token: vars('csrf_token'),
+            price: price,
+        };
+
+
+        await $.ajax({
+            url: url,
+            type: 'GET',
+            data: data,
+            dataType: 'json',
+        })
+        .done((response) => {
+
+                var clientSecret = response.clientSecret;
+                elements = stripe.elements({ clientSecret });
+    
+                const paymentElementOptions = {
+                layout: "accordion",
+                };
+            
+                const paymentElement = elements.create("payment", paymentElementOptions);
+                paymentElement.mount("#payment-element");
+            
+            });
+    }
+
+    async function confirmStripePayment()
+    {
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+              // Make sure to change this to your payment completion page
+              return_url: "http://localhost/easyappointments/",
+            },
+          });
+
+        if (error.type === "card_error" || error.type === "validation_error") 
+        {
+            console.log(error.message)
+            //showMessage(error.message);
+        }
+        else 
+        {
+            console.log("unexpected error")
+            console.log(error.message)
+
+        }
+    }
+
     return {
         registerAppointment,
         getAvailableHours,
         getUnavailableDates,
         applyPreviousUnavailableDates,
         deletePersonalInformation,
+        initializeStripePaymentUIWithServiceCost,
+        confirmStripePayment,
     };
 })();

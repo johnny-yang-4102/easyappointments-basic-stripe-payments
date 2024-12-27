@@ -415,9 +415,31 @@ App.Pages.Booking = (function () {
                 }
             }
 
-            // If we are on the 3rd tab then we will need to validate the user's input before proceeding to the next
-            // step.
             if ($target.attr('data-step_index') === '3') {
+
+                const serviceId = $selectService.val();
+                const service = vars('available_services').find(
+                    (availableService) => Number(availableService.id) === Number(serviceId),
+                );
+
+                App.Http.Booking.initializeStripePaymentUIWithServiceCost(`${service.price}00`);
+
+                //tack on service onto dom element
+                    //service name , duration, price, description
+                
+                $("#payment-service-name").text(service.name)
+                $("#payment-service-description").text(service.description)
+
+                $("#payment-service-duration").text(service.duration)
+
+                $("#payment-service-price").text(service.price)
+            }
+
+
+
+            // If we are on the 4th tab then we will need to validate the user's input before proceeding to the next
+            // step.
+            if ($target.attr('data-step_index') === '4') {
                 if (!App.Pages.Booking.validateCustomerForm()) {
                     return; // Validation failed, do not continue.
                 } else {
