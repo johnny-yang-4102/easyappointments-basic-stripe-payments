@@ -39,6 +39,11 @@
     'require_notes' => vars('require_notes'),
 ]); ?>
 
+<!-- Enter Payment Information -->
+
+<?php component('booking_payment_step'); ?>
+
+
 <!-- Appointment Data Confirmation -->
 
 <?php component('booking_final_step', [

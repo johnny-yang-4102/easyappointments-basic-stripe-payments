@@ -73,8 +73,8 @@
     </div>
 
     <div class="command-buttons">
-        <button type="button" id="button-back-4" class="btn button-back btn-outline-secondary"
-                data-step_index="4">
+        <button type="button" id="button-back-5" class="btn button-back btn-outline-secondary"
+                data-step_index="5">
             <i class="fas fa-chevron-left me-2"></i>
             <?= lang('back') ?>
         </button>
